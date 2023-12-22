@@ -64,7 +64,7 @@ const locations = [
     {
         name: "town square",
         "button text": ["Go to store", "Go to cave", "Fight dragon"], // ceux qu il y a ecrit sur les bouton en ville.
-        "button functions": [goStore, goCave, fightDragon], //les boutons dans la ville qui font appel aux fonctions nommés
+        "button functions": [goStore, goCave, fightDragon], //les boutons dans la ville qui font  appel par reference (c'est à dire, indique le chemin pour aller jusqu'à la fonction) aux fonctions nommés
         text: "You are in the town square. You see a sign that says \"Store\"." // le texte ecrit quand je suis en ville.
     },
     {
@@ -88,8 +88,26 @@ const locations = [
     {
         name: "kill monster",
         "button text": ["Go to town square", "Go to town square", "Go to town square"],
-        "button functions": [goTown, goTown, goTown],
+        "button functions": [goTown, goTown, easterEgg],
         text: 'The monster screams "Arg!" as it dies. You gain experience points and find gold.'
+    },
+    {
+        name: "lose",
+        "button text": ["REPLAY?", "REPLAY?", "REPLAY?"],
+        "button functions": [restart, restart, restart],
+        text: "You die. ☠️"
+    },
+    {
+        name: "win",
+        "button text": ["REPLAY?", "REPLAY?", "REPLAY?"],
+        "button functions": [restart, restart, restart],
+        text: "You defeat the dragon! YOU WIN THE GAME! 🎉"
+    },
+    {
+        name: "easter egg",
+        "button text": ["2", "8", "Go to town square?"],
+        "button functions": [pickTwo, pickEight, goTown],
+        text: "You find a secret game. Pick a number above. Ten numbers will be randomly chosen between 0 and 10. If the number you choose matches one of the random numbers, you win!"
     }
 ];
 
@@ -197,15 +215,35 @@ function update(location) { //la fonction qui permet de determiner mes boutons s
 
 function attack() { //la fonction attaque qui determine les degats selon mon arme et mon xp
     text.innerText = "The " + monsters[fighting].name + " attacks."; //annonce sous forme de texte que le montre attaque.
-    text.innerText += " You attack it with your " + weapons[currentWeapon].name + "."; // annonce que j attaque avec mon arme actuelle
-    health -= monsters[fighting].level; // reduit mes points de vie selon le montre qui attaque et par rapport à son level.
-    monsterHealth -= weapons[currentWeapon].power + (Math.floor(Math.random() * xp) + 1); // baisse la vie du monstre selon mon arme ET selon un chiffre au hasard compris entre 1 et mon XP actuel.
+    text.innerText += " You attack hit with your " + weapons[currentWeapon].name + "."; // annonce que j attaque avec mon arme actuelle
+    health -= getMonsterAttackValue(monsters[fighting].level); // reduit mes points de vie selon le montre qui attaque et par rapport à son level.
+    if (isMonsterHit()) {
+        monsterHealth -= weapons[currentWeapon].power + (Math.floor(Math.random() * xp) + 1);
+    }else {
+        text.innerText += " You miss.";
+    }
+     // baisse la vie du monstre selon mon arme ET selon un chiffre au hasard compris entre 1 et mon XP actuel.
     healthText.innerText = health; //affiche en texte ma vie.
     monsterHealthText.innerText = monsterHealth; //affiche la vie du monstre
     if(health <= 0) { // si mes points de vie sont à 0, alors appel de la fonction lose.
         lose()
-    }else if (monsterHealth <= 0) { //si la vie du monstre atteind 0 alors appel la fonction defeatMonster
-        defeatMonster(); //appel de la fonction
+    }else if (monsterHealth <= 0) { //si la vie du monstre atteind 0 alors
+         fighting === 2 ? winGame() : defeatMonster();   if (fighting === 2);  // si c'est le monstre de l'index 2 donc le dragon ALORS appel la fonction winGame SINON appel fonction defeatMonster.
+    }
+    if(Math.random() <= .1 && inventory.length !== 1) {
+        text.innerText += " Your " + inventory.pop() + " breaks."; // inventory.pop() permet de supprimer le dernier element de mon tableau inventory, donc supprime mon arme.
+        currentWeapon --;
+    }
+}
+
+function getMonsterAttackValue(level) {
+    const hit = (level * 5) - (Math.floor(Math.random() * xp));
+    return hit > 0 ?  hit : 0;
+}
+
+function isMonsterHit() {
+    if(true) {
+       return Math.random() > .2 || health < 20;
     }
 }
 
@@ -222,5 +260,57 @@ function defeatMonster() { //fonction quand le monstre est vaincu
 }
 
 function lose() {
+    update(locations[5]);
+}
 
+function winGame() {
+    update(locations[6]);
+}
+
+function restart() { //fonction pour restart, donc reinitialise toutes les variables.
+    xp = 0;
+    health = 100;
+    gold = 50;
+    currentWeapon = 0;
+    inventory = ["stick"];
+    goldText.innerText = gold;
+    healthText.innerText = health;
+    xpText.innerText = xp;
+    goTown();
+}
+
+function easterEgg() {
+    update(locations[7]);
+}
+
+function pick(guess) {
+    let numbers = [];
+    while (numbers.length < 10) {
+        numbers.push(Math.floor(Math.random() * 11));
+    }
+    text.innerText = "You picked " + guess + ". Here are the random numbers:\n";
+    for (let x = 1; x < 5; x++) {
+        text.innerText += numbers[i] + "\n";
+    }
+    if(numbers.indexOf(guess) !== -1) { // verifie si la valeur de guess est bien dans mon tableau.
+        text.innerText += "Right! You win 20 gold!";
+        gold += 20;
+        goldText.innerText = gold;
+    }else {
+        text.innerText += "Wrong! You lose 10 health!"
+        health -= 10;
+        healthText.innerText = health;
+        if(health <= 0) {
+            lose();
+        }
+    }
+    
+}
+
+function pickTwo() {
+    pick(2);
+}
+
+function pickEight() {
+    pick(8);
 }
