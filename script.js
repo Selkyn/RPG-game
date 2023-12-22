@@ -289,7 +289,7 @@ function pick(guess) {
         numbers.push(Math.floor(Math.random() * 11));
     }
     text.innerText = "You picked " + guess + ". Here are the random numbers:\n";
-    for (let x = 1; x < 5; x++) {
+    for (let i = 1; i < 5; i++) {
         text.innerText += numbers[i] + "\n";
     }
     if(numbers.indexOf(guess) !== -1) { // verifie si la valeur de guess est bien dans mon tableau.
