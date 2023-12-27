@@ -2,6 +2,13 @@ body {
     background-color: #0a0a23;
 }
 
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
 #text {
     background-color: #0a0a23;
     color: #ffffff;
@@ -41,4 +48,101 @@ button {
     background-color: #feac32;
     background-image: linear-gradient(#fecc4c, #ffac33);
     border: 3px solid #feac32;
+}
+
+#animations {
+    width: 1200px;
+    height: 650px;
+    color: aliceblue;
+    border: 2px solid white;
+    position: relative;
+    
+}
+
+#town {
+    background-image: url(../images/village.webp); 
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+#store {
+    background-image: url(../images/store.webp);
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+#cave {
+    background-image: url(../images/cave.PNG);
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: none;
+    overflow: hidden;
+}
+#seller {
+    width: 220px;
+    position: absolute;
+    right: 130px;
+    bottom: 5px;
+}
+
+/* #knight-store {
+    position: absolute;
+    width:  300px;
+    left: 500px;
+    top: 300px;
+} */
+
+#img-test {
+    position: absolute;
+    z-index: 5;
+    width: 300px;
+    left: 300px;
+    top: 280px;
+}
+
+#monster-img {
+    position: absolute;
+    z-index: 5;
+    width: 280px;
+    right: 150px;
+    top: 280px;
+}
+
+#dragon-room {
+    background-image: url(../images/volcan1.webp);
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: none;
+    overflow: hidden;
+}
+
+#dragon-img {
+    width: 650px;
+    position: absolute;
+    right: 5px;
+    top: 30px;
+    
+}
+
+#blood {
+    position: absolute;
+    z-index: 4;
+    width: 300px;
+    left: 320px;
+    top: 400px;
+    display: none;
 }
