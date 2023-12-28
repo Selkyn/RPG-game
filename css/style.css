@@ -96,6 +96,16 @@ button {
     bottom: 5px;
 }
 
+#items {
+    position: absolute;
+    z-index: 6;
+    width: 80px;
+    left: 420px;
+    top: 250px;
+    /* transition: all;
+    transform: translateY(-25%); */
+}
+
 /* #knight-store {
     position: absolute;
     width:  300px;
@@ -141,8 +151,36 @@ button {
 #blood {
     position: absolute;
     z-index: 4;
-    width: 300px;
+    width: 320px;
     left: 320px;
     top: 400px;
     display: none;
+}
+
+#damage-on-monster {
+    color: yellow;
+    position: absolute;
+    z-index: 6;
+    right: 300px;
+    top: 200px;
+    font-size: 40px;
+}
+
+#damage-of-monster {
+    color: red;
+    position: absolute;
+    z-index: 6;
+    left: 450px;
+    top: 200px;
+    font-size: 40px;
+}
+
+#you-die {
+    width: 500px;
+    opacity: 0.5;
+    position: absolute;
+    z-index: 7;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
 }
