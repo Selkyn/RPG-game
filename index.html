@@ -10,60 +10,73 @@
 
 <body>
     <main>
-    <div id="game">
-        <div id="stats">
-            <span class="stat">XP: <strong><span id="xpText">0</span></strong></span>
-            <span class="stat">Health: <strong><span id="healthText">100</span></strong></span>
-            <span class="stat">Gold: <strong><span id="goldText">50</span></strong></span>
+        <div id="game">
+            <div id="stats">
+                <span class="stat">XP: <strong><span id="xpText">0</span></strong></span>
+                <span class="stat">Health: <strong><span id="healthText">100</span></strong></span>
+                <span class="stat">Gold: <strong><span id="goldText">50</span></strong></span>
+            </div>
+            <div id="controls">
+                <button id="button1">Go to store</button>
+                <button id="button2">Go to cave</button>
+                <button id="button3">Fight dragon</button>
+            </div>
+            <div id="monsterStats">
+                <span class="stat">Monster Name: <strong><span id="monsterName"></span></strong></span>
+                <span class="stat">Health: <strong><span id="monsterHealth"></span></strong></span>
+            </div>
+            <div id="text">
+                Welcome to Dragon Repeller. You must defeat the dragon that is preventing people from leaving the town.
+                You are in the town square. Where do you want to go? Use the buttons above.
+            </div>
         </div>
-        <div id="controls">
-            <button id="button1">Go to store</button>
-            <button id="button2">Go to cave</button>
-            <button id="button3">Fight dragon</button>
-        </div>
-        <div id="monsterStats">
-            <span class="stat">Monster Name: <strong><span id="monsterName"></span></strong></span>
-            <span class="stat">Health: <strong><span id="monsterHealth"></span></strong></span>
-        </div>
-        <div id="text">
-            Welcome to Dragon Repeller. You must defeat the dragon that is preventing people from leaving the town. You are in the town square. Where do you want to go? Use the buttons above. 
-        </div>
-    </div>
 
-    <div id="animations">
-        <div id="damages">
-            <p id="damage-of-monster"></p>
-            <p id="damage-on-monster"></p>
-        </div>
-        <img id="img-test" src="images/stick.png" alt="">
-        <img id="blood" src="images/sang.png" alt="">
-        <div id="audio-section">
-            <audio id="ambiance-sound" autoplay loop>
-                <source src="media/ville.mp3">
-            </audio>
-            <audio id="attack-sound" autoplay></audio>
-            <audio id="attack-monster" autoplay></audio>
-            <audio id="battle-music" autoplay></audio>
-            <audio id="death" autoplay></audio>
-        </div>
-        <div id="town">
-            <!-- <div id="container-img">
+        <div id="animations">
+            <div id="damages">
+                <p id="damage-of-monster"></p>
+                <p id="damage-on-monster"></p>
+            </div>
+            
+                <img id="img-test" src="images/stick.png" alt="">
+                <img id="blood" src="images/sang.png" alt="">
+                <img id="you-die" src="images/youdie.PNG" alt="">
+                
+            
+            <div id="audio-section">
+                <audio id="ambiance-sound" autoplay loop>
+                    <source src="media/ville.mp3">
+                </audio>
+                <audio id="attack-sound" autoplay></audio>
+                <audio id="attack-monster" autoplay></audio>
+                <audio id="battle-music" autoplay></audio>
+                <audio id="death" autoplay></audio>
+                <audio id="gandalf" autoplay></audio>
+                <audio id="teleport" autoplay></audio>
+                <audio id="heal" autoplay></audio>
+                <audio id="gold-sound" autoplay></audio>
+                <audio id="welcome-stranger" autoplay></audio>
+                
+            </div>
+            <div id="town">
+                <!-- <div id="container-img">
                 
             </div> -->
-        </div>
+            </div>
 
-        <div id="store"></div>
+            <div id="store"></div>
             <img id="items">
-        <div id="cave">
-            
-            <img id="monster-img">
+            <div id="cave">
+
+                <img id="monster-img">
+            </div>
+
+            <div id="dragon-room">
+                <img id="dragon-img" src="images/dragon.png" alt="">
+                <img id="fireball">
+                <audio id="dragon-roar" autoplay></audio>
+            </div>
         </div>
-        
-        <div id="dragon-room">
-            <img id="dragon-img" src="images/dragon.png" alt="">
-        </div>
-    </div>
-</main>
+    </main>
 
     <script src="./script.js"></script>
 </body>

@@ -32,7 +32,14 @@ const attackSound = document.getElementById("attack-sound");
 const battleMusic = document.getElementById("battle-music");
 const deathSound = document.getElementById("death");
 const monsterAttackSound = document.getElementById("attack-monster");
-
+const gandalf = document.getElementById("gandalf");
+const teleport = document.getElementById("teleport");
+const youDie = document.getElementById("you-die");
+const heal = document.getElementById("heal");
+const goldSound = document.getElementById("gold-sound");
+const welcomeStranger = document.getElementById("welcome-stranger");
+const fireball = document.getElementById("fireball");
+const dragonRoar = document.getElementById("dragon-roar");
 
 
 //variable qui va determiner mes monstres
@@ -57,7 +64,10 @@ const monsters = [
         name: "dragon",
         level: 20,
         health: 300,
-        music: ["media/dragonbattle.mp3", "media/darksoul.mp3"]
+        music: ["media/dragonbattle.mp3", "media/darksoul.mp3"],
+        voice: "media/gandalf.mp3",
+        attackAnimation: "images/fireball.png",
+        roar: "media/dragon.mp3"
     },
 ];
 
@@ -67,7 +77,8 @@ const weapons = [
     {
         name: "stick",
         power: 5,
-        imageURL: "images/stick.png"
+        imageURL: "images/stick.png",
+        soundHit: "media/attaque.mp3"
         
         
     },
@@ -75,19 +86,22 @@ const weapons = [
         name: "dagger",
         power: 30,
         imageURL: "images/dagger.png",
-        imageWeapon: "images/dague.png"
+        imageWeapon: "images/dague.png",
+        soundHit: "media/attaque.mp3"
     },
     {
         name: "claw hammer",
         power: 50,
         imageURL: "images/axe.png",
-        imageWeapon: "images/hache.png"
+        imageWeapon: "images/hache.png",
+        soundHit: "media/attaque.mp3"
     },
     {
         name: "sword",
         power: 100,
         imageURL: "images/sword.png",
-        imageWeapon: "images/epee.png"
+        imageWeapon: "images/epee.png",
+        soundHit: "media/punch.mp3"
     }    
 ];
 
@@ -110,7 +124,8 @@ const locations = [
         "button text": ["Buy 10 health (10 gold)", "Buy weapon (30 gold)", "Go to town square"],
         "button functions": [buyHealth, buyWeapon, goTown],
         text: "You enter the store.",
-        ambiance: "media/erreur.mp3"
+        ambiance: "media/erreur.mp3",
+        soundWelcome: "media/welcome.mp3"
     },
     {
         name: "cave",
@@ -161,6 +176,8 @@ button3.onclick = fightDragon;
 
 //fonction qui va me faire revenir vers la ville en faisant appel à ma fonction update qui elle meme choisir une location dans ma variable location : ici index 0 me fait revenir vers la ville.
 function goTown() {
+    youDie.style.display = "none";
+    youDie.style.opacity = "0";
     town.style.display = "block";
     cave.style.display = "none";
     store.style.display = "none";
@@ -186,6 +203,7 @@ function goStore() {
     seller.id = "seller";
     seller.src = "images/seller.png";
     store.appendChild(seller);
+    welcomeStranger.src = "media/welcome.mp3";
     // let knightStore = document.createElement("img");
     // knightStore.id ="knight-store";
     // knightStore.src = "images/knightNoStuff.png"
@@ -213,6 +231,7 @@ function goFight() {
     monsterStats.style.display = "block"; // fait apparaitre les stats des monstres
     monsterImg.src = monsters[fighting].imageURL;
     battleMusic.src = monsters[fighting].music[0];
+    gandalf.src = monsters[fighting].voice;
     monsterName.innerText = monsters[fighting].name; //permet de changer le texte pour montrer le nom du monstre qu on est entrain d affronter
     monsterHealthText.innerText = monsterHealth; //afficher en texte la vie du monstre
     health.innerText = health; // affiche mes points de vie
@@ -254,6 +273,7 @@ function buyHealth() { // fonction pour acheter de la vie.
         health += 10; // augmenter ma vie quand j achete de la vie
         goldText.innerText = gold; //met à jour le texte quand mes golds changent
         healthText.innerText = health; //met à jour le texte quand ma vie change
+        heal.src = "media/heal.mp3";
         items.src = "images/coeur.png";
         items.style.opacity = "1";
         items.style.transition = "transform .3s ease";
@@ -280,6 +300,7 @@ function buyWeapon() { //fonction pour acheter des armes
             goldText.innerText = gold; //permet d'afficher mes gold en texte
             let newWeapon = weapons[currentWeapon].name; // variable qui determine le nom de la nouvelle arme. Vu que quand j achete une nouvelle arme, mon currentWeapon incremente (il passe de 1 à 2 par exemple), alors cela me permetra de changer d'index dans mon tableau et donc d'obtenir une nouvelle arme.
             text.innerText = "You now have a" + newWeapon + "."; // permet d afficher en texte ma nouvelle arme
+            goldSound.src = "media/gold.mp3";
             imgTest.src = weapons[currentWeapon].imageURL;
             items.src = weapons[currentWeapon].imageWeapon;
             items.style.opacity = "1";
@@ -342,7 +363,7 @@ function update(location) { //la fonction qui permet de determiner mes boutons s
 }
 
 function attack() { //la fonction attaque qui determine les degats selon mon arme et mon xp
-    attackSound.src = "media/attaque.mp3";
+    attackSound.src = weapons[currentWeapon].soundHit;
     imgTest.style.transition = "transform .3s ease";
     imgTest.style.transform = "translateX(100%) rotate(35deg)";
     // imgTest.style.boxShadow = "10px 10px 5px #888888";
@@ -363,6 +384,22 @@ function attack() { //la fonction attaque qui determine les degats selon mon arm
     text.innerText += " You attack hit with your " + weapons[currentWeapon].name + "."; // annonce que j attaque avec mon arme actuelle
     let damageReceived = getMonsterAttackValue(monsters[fighting].level);
     health -= damageReceived; // reduit mes points de vie selon le montre qui attaque et par rapport à son level.
+    dragonRoar.src = monsters[fighting].roar;
+    fireball.src = monsters[fighting].attackAnimation;
+    // fireball.style.display = "block";
+    fireball.style.transition = "opacity 2s ease, transform 2s ease";
+    fireball.style.opacity = "1";
+    fireball.style.transform = "translateX(-100%) translateY(50%)"
+    setTimeout(function() {
+        
+        fireball.style.opacity = "0";
+        fireball.style.transform = "translateX(0%) translateY(0%)"
+    },2000);
+    // setTimeout(function() {
+    //     fireball.style.display = "none";
+    // },2200);
+
+
     
     setTimeout(function() {
         damageOfMonster.innerText = "- " + damageReceived;
@@ -417,6 +454,7 @@ function dodge() {
     text.innerText = "You dodge the attack from the " + monsters[fighting].name + "."
     imgTest.style.transition = "transform .2s ease";
     imgTest.style.transform = "translateY(-25%)";
+    teleport.src = "media/dodge.mp3";
     setTimeout(() => {
         imgTest.style.transform = "translateY(0%)";
         }, "250");
@@ -433,26 +471,30 @@ function defeatMonster() { //fonction quand le monstre est vaincu
         monsterImg.style.display = "none";
         }, "2000");
     update(locations[4]);
-    battleMusic.src = "media/fanfare.mp3";
+    setTimeout(() =>{
+        battleMusic.src = "media/fanfare.mp3";
+    },700)
+    
 }
 
 function lose() {
+    youDie.style.display = "block";
     setTimeout(() => {
         imgTest.style.transition = "rotate 3s ease";
         imgTest.style.transform = "rotate(-90deg)";
         blood.style.display = "block";
         deathSound.src = "media/mort.mp3"; 
         battleMusic.src = monsters[fighting].music[1];
-        let youDie = document.createElement("img")
-        youDie.src = "images/youdie.png";
-        youDie.id = "you-die";
-        dragonRoom.appendChild(youDie);
-        cave.appendChild(youDie);
+        
+        youDie.style.transition = "opacity 3s ease";
+        youDie.style.opacity = "0.5";
+        // let youDie = document.createElement("img")
+        // youDie.src = "images/youdie.png";
+        // youDie.id = "you-die";
+        // animationsSection.appendChild(youDie);
+        // // cave.appendChild(youDie);
         }, "1000");
-        setTimeout(() => {
-            youDie.src = "";
-        },"3000")
-       
+        
     update(locations[5]);
 }
 
@@ -511,3 +553,5 @@ function pickTwo() {
 function pickEight() {
     pick(8);
 }
+
+
