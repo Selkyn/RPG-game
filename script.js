@@ -40,7 +40,7 @@ const goldSound = document.getElementById("gold-sound");
 const welcomeStranger = document.getElementById("welcome-stranger");
 const fireball = document.getElementById("fireball");
 const dragonRoar = document.getElementById("dragon-roar");
-
+const kameaSound = document.getElementById("kamea-sound");
 
 //variable qui va determiner mes monstres
 const monsters = [
@@ -114,10 +114,6 @@ const locations = [
         "button functions": [goStore, goCave, fightDragon], //les boutons dans la ville qui font  appel par reference (c'est à dire, indique le chemin pour aller jusqu'à la fonction) aux fonctions nommés
         text: "You are in the town square. You see a sign that says \"Store\".", // le texte ecrit quand je suis en ville.
         ambiance: "media/ville.mp3"
-        // images: {
-        //     dagger: "",
-        //     sword: "",
-
     },
     {
         name: "store",
@@ -186,8 +182,6 @@ function goTown() {
     update(locations[0]); //update permet de changer les boutons selon la location où je me trouve
     animationsSection.style.backgroundImage = "url(images/village.webp)";
     battleMusic.src = "";
-
-
 }
 
 //fontion qui va me faire aller vers le store en faisant appel à ma fonction upadate qui elle meme va choisir une location dans ma variable location : ici index 1 me fait aller vers le store et donc upgrader mes button pour le store
@@ -204,13 +198,6 @@ function goStore() {
     seller.src = "images/seller.png";
     store.appendChild(seller);
     welcomeStranger.src = "media/welcome.mp3";
-    // let knightStore = document.createElement("img");
-    // knightStore.id ="knight-store";
-    // knightStore.src = "images/knightNoStuff.png"
-    // if (newWeapon = [1]) {
-    //     store.appendChild(knightStore);
-    // }
-
 }
 
 function goCave() {
@@ -266,6 +253,57 @@ function fightDragon() {
     dragonRoom.style.backgroundImage = "url(images/volcan1.webp)";
     goFight();
 }
+
+function kamea() {
+    const kamehameha = document.createElement("button");
+    kamehameha.innerText = "Kamehameha";
+    kamehameha.id = "kamehameha";
+    kamehameha.style.display = "block";
+    animationsSection.appendChild(kamehameha);
+    kamehameha.addEventListener('click', function(){
+        kameaSound.src = "media/kamea.mp3";
+        const kameaBall = document.createElement("img");
+        kameaBall.id = "kamea-ball";
+        kameaBall.src = "images/boulekamea.webp";
+        kameaBall.style.opacity = "0";
+        const kameaTir = document.createElement("img");
+        kameaTir.id = "kamea-tir";
+        kameaTir.src = "images/tirkamea.png";
+        kameaTir.style.opacity = "0";
+        const aura = document.createElement("img");
+        aura.id = "aura";
+        aura.src = "images/aura.gif";
+        aura.style.opacity = "0";
+        animationsSection.appendChild(aura);
+       animationsSection.appendChild(kameaTir);
+        animationsSection.appendChild(kameaBall);
+        setTimeout(() => {
+            kameaBall.style.transition = "opacity 3s ease";
+            kameaBall.style.opacity = "1";
+            aura.style.transition = "opacity 1s ease"
+            aura.style.opacity = "1";
+        }, 300);
+        setTimeout(() => {
+            kameaBall.style.transform = "translateX(100%)";
+            kameaBall.style.transition = "transform .2s ease"
+            kameaTir.style.transition = "opacity .2s ease"
+            kameaTir.style.opacity = ".8";
+        }, 3000);
+        setTimeout(() => {
+            kameaTir.style.transition = "opacity 3s ease"
+            kameaTir.style.opacity = "0";
+            kameaBall.style.transition = "opacity 3s ease"
+            kameaBall.style.opacity = "0";
+            aura.style.transition = "opacity 4s ease"
+            aura.style.opacity = "0";
+        }, 5500);
+        
+        
+
+    });
+}
+kamea();
+
 
 function buyHealth() { // fonction pour acheter de la vie.
     if(gold >= 10) { // si j'ai 1à golds ou + alors je peux acheter de la vie
@@ -349,17 +387,7 @@ function update(location) { //la fonction qui permet de determiner mes boutons s
     button3.onclick = location["button functions"][2];
     text.innerText = location.text;
     ambianceSound.src = location.ambiance;
-    // let locationImage = document.createElement("img");
-    // imgTest.src = location.imageURL;
     
-    // Assurez-vous que l'élément #image-container existe dans votre HTML où vous voulez afficher l'image
-    // let imageContainer = document.getElementById("image-container");
-    
-    // // Effacez le contenu précédent avant d'ajouter la nouvelle image
-    // imageContainer.innerHTML = "";
-    
-    // // Ajoutez l'élément img à l'élément conteneur
-    // imageContainer.appendChild(locationImage);
 }
 
 function attack() { //la fonction attaque qui determine les degats selon mon arme et mon xp
@@ -384,7 +412,7 @@ function attack() { //la fonction attaque qui determine les degats selon mon arm
     text.innerText += " You attack hit with your " + weapons[currentWeapon].name + "."; // annonce que j attaque avec mon arme actuelle
     let damageReceived = getMonsterAttackValue(monsters[fighting].level);
     health -= damageReceived; // reduit mes points de vie selon le montre qui attaque et par rapport à son level.
-    dragonRoar.src = monsters[fighting].roar;
+    dragonRoar.src = monsters[fighting].roar; //va chercher dans mon tableau d'objet le cri du dragon
     fireball.src = monsters[fighting].attackAnimation;
     // fireball.style.display = "block";
     fireball.style.transition = "opacity 2s ease, transform 2s ease";
@@ -395,11 +423,7 @@ function attack() { //la fonction attaque qui determine les degats selon mon arm
         fireball.style.opacity = "0";
         fireball.style.transform = "translateX(0%) translateY(0%)"
     },2000);
-    // setTimeout(function() {
-    //     fireball.style.display = "none";
-    // },2200);
-
-
+    
     
     setTimeout(function() {
         damageOfMonster.innerText = "- " + damageReceived;
@@ -488,11 +512,7 @@ function lose() {
         
         youDie.style.transition = "opacity 3s ease";
         youDie.style.opacity = "0.5";
-        // let youDie = document.createElement("img")
-        // youDie.src = "images/youdie.png";
-        // youDie.id = "you-die";
-        // animationsSection.appendChild(youDie);
-        // // cave.appendChild(youDie);
+        
         }, "1000");
         
     update(locations[5]);
